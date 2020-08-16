@@ -1,5 +1,7 @@
 package com.ghevi.reddit.model;
 
+import com.ghevi.reddit.exceptions.SpringRedditException;
+
 import java.util.Arrays;
 
 public enum VoteType {
@@ -11,12 +13,11 @@ public enum VoteType {
     VoteType(int direction) {
     }
 
-    public static VoteType lookup(Integer direction) {
+    public static VoteType lookup(Integer direction) throws SpringRedditException {
         return Arrays.stream(VoteType.values())
                 .filter(value -> value.getDirection().equals(direction))
                 .findAny()
-                // .orElseThrow(() -> new SpringRedditException("Vote not found"));
-                .orElseThrow(() -> new Error("Vote not found"));
+                .orElseThrow(() -> new SpringRedditException("Vote not found"));
     }
 
     public Integer getDirection() {

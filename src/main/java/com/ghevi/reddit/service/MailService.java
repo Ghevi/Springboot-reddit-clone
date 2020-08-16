@@ -10,8 +10,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.MimeMessage;
-
 @Service
 @AllArgsConstructor
 @Slf4j // inject instance of Slf4j logger for log

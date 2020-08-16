@@ -1,6 +1,8 @@
 package com.ghevi.reddit.service;
 
 import com.ghevi.reddit.dto.RegisterRequest;
+import com.ghevi.reddit.exceptions.SpringRedditException;
+import com.ghevi.reddit.model.NotificationEmail;
 import com.ghevi.reddit.model.User;
 import com.ghevi.reddit.model.VerificationToken;
 import com.ghevi.reddit.repository.UserRepository;
@@ -24,8 +26,10 @@ public class AuthService {
 
     private final VerificationTokenRepository verificationTokenRepository;
 
+    private final MailService mailService;
+
     @Transactional
-    public void signup(RegisterRequest registerRequest) {
+    public void signup(RegisterRequest registerRequest) throws SpringRedditException {
         User user = new User();
 
         user.setUsername(registerRequest.getUsername());
@@ -36,6 +40,11 @@ public class AuthService {
 
         userRepository.save(user);
         String token = generateVerificationToken(user);
+
+        mailService.sendMail(new NotificationEmail("Please activate you Account",
+                user.getEmail(), "Thank you for signing up to Spring Reddit, " +
+                "please, click on the url below to activate your account: " +
+                "http://localhost:8080/api/auth/accountVerification/" + token));
     }
 
     private String generateVerificationToken(User user) {
