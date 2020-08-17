@@ -1,5 +1,6 @@
 package com.ghevi.reddit.service;
 
+import com.ghevi.reddit.dto.AuthenticationResponse;
 import com.ghevi.reddit.dto.LoginRequest;
 import com.ghevi.reddit.dto.RegisterRequest;
 import com.ghevi.reddit.exceptions.SpringRedditException;
@@ -8,9 +9,12 @@ import com.ghevi.reddit.model.User;
 import com.ghevi.reddit.model.VerificationToken;
 import com.ghevi.reddit.repository.UserRepository;
 import com.ghevi.reddit.repository.VerificationTokenRepository;
+import com.ghevi.reddit.security.JwtProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +37,8 @@ public class AuthService {
     private final MailService mailService;
 
     private final AuthenticationManager authenticationManager;
+
+    private final JwtProvider jwtProvider;
 
     @Transactional
     public void signup(RegisterRequest registerRequest) throws SpringRedditException {
@@ -78,10 +84,15 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public void login(LoginRequest loginRequest) {
-        authenticationManager.authenticate(
+    public AuthenticationResponse login(LoginRequest loginRequest) throws SpringRedditException {
+        Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getUsername(),
                         loginRequest.getPassword()));
+
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtProvider.generateToken(authenticate);
+
+        return new AuthenticationResponse(token, loginRequest.getUsername());
     }
 }

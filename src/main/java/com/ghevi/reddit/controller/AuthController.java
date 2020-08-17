@@ -1,5 +1,6 @@
 package com.ghevi.reddit.controller;
 
+import com.ghevi.reddit.dto.AuthenticationResponse;
 import com.ghevi.reddit.dto.LoginRequest;
 import com.ghevi.reddit.dto.RegisterRequest;
 import com.ghevi.reddit.exceptions.SpringRedditException;
@@ -29,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequest loginRequest) {
-    authService.login(loginRequest);
+    public AuthenticationResponse login(@RequestBody LoginRequest loginRequest) throws SpringRedditException {
+        return authService.login(loginRequest);
     }
 }
