@@ -1,43 +1,47 @@
 package com.ghevi.reddit.controller;
 
 import com.ghevi.reddit.dto.PostRequest;
+import com.ghevi.reddit.dto.PostResponse;
 import com.ghevi.reddit.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static org.springframework.http.ResponseEntity.status;
+
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/posts/")
 @AllArgsConstructor
 public class PostController {
 
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity createPost(@RequestBody PostRequest postRequest) {
+    public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest) {
         postService.save(postRequest);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
+        return status(HttpStatus.OK).body(postService.getAllPosts());
     }
 
     @GetMapping("/{id}")
-    public PostResponse getPost(@PathVariable Long id) {
-        return postService.getPost(id);
+    public ResponseEntity<PostResponse> getPost(@PathVariable Long id) {
+        return status(HttpStatus.OK).body(postService.getPost(id));
     }
 
-    @GetMapping("/")
-    public List<PostResponse> getAllPosts() {
-        return postService.getAllPosts();
+    @GetMapping("by-subreddit/{id}")
+    public ResponseEntity<List<PostResponse>> getPostsBySubreddit(Long id) {
+        return status(HttpStatus.OK).body(postService.getPostsBySubreddit(id));
     }
 
-    @GetMapping("/by-subreddit/{id}")
-    public List<PostResponse> getPostBySubreddit(Long id) {
-        return postService.getPostsBySubreddit(id);
+    @GetMapping("by-user/{name}")
+    public ResponseEntity<List<PostResponse>> getPostsByUsername(String username) {
+        return status(HttpStatus.OK).body(postService.getPostsByUsername(username));
     }
-
-    @GetMapping("/by-user/{name}")
-    public List<PostResponse> getPostsByUsername(String username) {
-        return postService.getPostsByUsername(username);
-    }
-
 }
