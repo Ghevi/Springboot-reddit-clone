@@ -20,4 +20,3 @@ public class PostResponse {
     private boolean upVote;
     private boolean downVote;
 }
-

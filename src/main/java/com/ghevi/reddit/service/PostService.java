@@ -1,5 +1,6 @@
 package com.ghevi.reddit.service;
 
+
 import com.ghevi.reddit.dto.PostRequest;
 import com.ghevi.reddit.dto.PostResponse;
 import com.ghevi.reddit.exceptions.PostNotFoundException;
@@ -27,11 +28,11 @@ import static java.util.stream.Collectors.toList;
 @Transactional
 public class PostService {
 
+    private final PostRepository postRepository;
     private final SubredditRepository subredditRepository;
+    private final UserRepository userRepository;
     private final AuthService authService;
     private final PostMapper postMapper;
-    private final PostRepository postRepository;
-    private final UserRepository userRepository;
 
     public void save(PostRequest postRequest) {
         Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())

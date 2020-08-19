@@ -1,7 +1,7 @@
 package com.ghevi.reddit.controller;
 
+
 import com.ghevi.reddit.dto.SubredditDto;
-import com.ghevi.reddit.exceptions.SpringRedditException;
 import com.ghevi.reddit.service.SubredditService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/subreddit")
+@RequestMapping("/api/subreddit")
 @AllArgsConstructor
 @Slf4j
 public class SubredditController {
@@ -21,16 +21,21 @@ public class SubredditController {
 
     @PostMapping
     public ResponseEntity<SubredditDto> createSubreddit(@RequestBody SubredditDto subredditDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(subredditService.save(subredditDto));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(subredditService.save(subredditDto));
     }
 
     @GetMapping
     public ResponseEntity<List<SubredditDto>> getAllSubreddits() {
-        return ResponseEntity.status(HttpStatus.OK).body(subredditService.getAll());
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(subredditService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubredditDto> getSubreddit(@PathVariable Long id) throws SpringRedditException {
-        return ResponseEntity.status(HttpStatus.OK).body(subredditService.getSubreddit(id));
+    public ResponseEntity<SubredditDto> getSubreddit(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(subredditService.getSubreddit(id));
     }
 }

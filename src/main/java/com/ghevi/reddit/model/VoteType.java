@@ -1,5 +1,6 @@
 package com.ghevi.reddit.model;
 
+
 import com.ghevi.reddit.exceptions.SpringRedditException;
 
 import java.util.Arrays;
@@ -13,7 +14,7 @@ public enum VoteType {
     VoteType(int direction) {
     }
 
-    public static VoteType lookup(Integer direction) throws SpringRedditException {
+    public static VoteType lookup(Integer direction) {
         return Arrays.stream(VoteType.values())
                 .filter(value -> value.getDirection().equals(direction))
                 .findAny()

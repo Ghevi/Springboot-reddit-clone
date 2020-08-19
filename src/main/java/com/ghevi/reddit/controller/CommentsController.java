@@ -1,15 +1,16 @@
 package com.ghevi.reddit.controller;
 
+
 import com.ghevi.reddit.dto.CommentsDto;
 import com.ghevi.reddit.service.CommentService;
 import lombok.AllArgsConstructor;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api/comments/")

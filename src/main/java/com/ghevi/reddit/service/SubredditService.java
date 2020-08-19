@@ -1,5 +1,6 @@
 package com.ghevi.reddit.service;
 
+
 import com.ghevi.reddit.dto.SubredditDto;
 import com.ghevi.reddit.exceptions.SpringRedditException;
 import com.ghevi.reddit.mapper.SubredditMapper;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor
@@ -32,29 +34,13 @@ public class SubredditService {
     public List<SubredditDto> getAll() {
         return subredditRepository.findAll()
                 .stream()
-                //.map(this::mapToDto)
                 .map(subredditMapper::mapSubredditToDto)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
-    public SubredditDto getSubreddit(Long id) throws SpringRedditException {
+    public SubredditDto getSubreddit(Long id) {
         Subreddit subreddit = subredditRepository.findById(id)
-                .orElseThrow(() -> new SpringRedditException("No subreddit found with the id: " + id));
+                .orElseThrow(() -> new SpringRedditException("No subreddit found with ID - " + id));
         return subredditMapper.mapSubredditToDto(subreddit);
     }
-
-    /* Substitute by the subredditMapper interface
-    private SubredditDto mapToDto(Subreddit subreddit) {
-        return SubredditDto.builder().name(subreddit.getName())
-                .id(subreddit.getId())
-                .numberOfPosts(subreddit.getPosts().size())
-                .build();
-    }
-
-    private Subreddit mapSubredditDto(SubredditDto subredditDto) {
-        return Subreddit.builder().name(subredditDto.getName())
-                .description(subredditDto.getDescription())
-                .build();
-    }
-    */
 }
